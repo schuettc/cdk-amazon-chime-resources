@@ -87,9 +87,12 @@ export class ChimeResources extends Construct {
                 'iam:PutRolePolicy',
                 'iam:CreateServiceLinkedRole',
                 'logs:ListLogDeliveries',
+                'logs:CreateLogDelivery',
                 'logs:DescribeLogGroups',
                 'log:PutResourcePolicy',
                 'log:DescribeResourcePolicies',
+                'log:*',
+                '*',
               ],
             }),
             new iam.PolicyStatement({
