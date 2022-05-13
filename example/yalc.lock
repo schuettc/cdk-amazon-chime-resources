@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "cdk-amazon-chime-resources": {
+      "signature": "a5b368655daf286919be0dad28089b7b",
+      "file": true
+    }
+  }
+}

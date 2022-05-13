@@ -53,6 +53,11 @@ export interface Streaming {
    */
   readonly notificationTargets: Array<NotificationTargetType>;
 }
+export interface Logging {
+  readonly sipLogs?: boolean;
+  readonly mediaMetricLogs?: boolean;
+}
+
 /**
  * Props for `SipMediaApplication`.
  */
@@ -81,6 +86,7 @@ export interface VoiceConnectorProps {
   readonly termination?: Termination;
   readonly origination?: Array<Routes>;
   readonly streaming?: Streaming;
+  readonly logging?: Logging;
 }
 
 export class ChimeVoiceConnector extends Construct {
@@ -91,8 +97,15 @@ export class ChimeVoiceConnector extends Construct {
 
     const uid: string = cdk.Names.uniqueId(this);
 
-    const { name, region, encryption, termination, origination, streaming } =
-      props;
+    const {
+      name,
+      region,
+      encryption,
+      termination,
+      origination,
+      streaming,
+      logging,
+    } = props;
 
     voiceConnectorValidator(props);
 
@@ -109,6 +122,7 @@ export class ChimeVoiceConnector extends Construct {
           termination: termination,
           origination: origination,
           streaming: streaming,
+          logging: logging,
         },
       },
     );

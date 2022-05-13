@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
-import { CustomResource } from 'aws-cdk-lib';
+import { CustomResource, RemovalPolicy } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as cr from 'aws-cdk-lib/custom-resources';
@@ -75,6 +75,7 @@ export class ChimeResources extends Construct {
                 'chime:GetPhoneNumber',
                 'chime:CreateVoiceConnector',
                 'chime:PutVoiceConnectorStreamingConfiguration',
+                'chime:PutVoiceConnectorLoggingConfiguration',
                 'chime:PutVoiceConnectorTermination',
                 'chime:PutVoiceConnectorOrigination',
                 'chime:ListPhoneNumbers',
@@ -85,6 +86,10 @@ export class ChimeResources extends Construct {
                 'lambda:AddPermission',
                 'iam:PutRolePolicy',
                 'iam:CreateServiceLinkedRole',
+                'logs:ListLogDeliveries',
+                'logs:DescribeLogGroups',
+                'log:PutResourcePolicy',
+                'log:DescribeResourcePolicies',
               ],
             }),
             new iam.PolicyStatement({
@@ -106,11 +111,20 @@ export class ChimeResources extends Construct {
         ),
       ],
     });
+
+    const boto3Layer = new lambda.LayerVersion(this, 'boto3', {
+      removalPolicy: RemovalPolicy.DESTROY,
+      code: lambda.Code.fromAsset(path.join(__dirname, '../resources/layer')),
+      compatibleArchitectures: [lambda.Architecture.ARM_64],
+      compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
+    });
+
     const fn = new lambda.Function(stack, constructName, {
       runtime: lambda.Runtime.PYTHON_3_9,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../resources')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../resources/lambda')),
       handler: 'index.handler',
       architecture: lambda.Architecture.ARM_64,
+      layers: [boto3Layer],
       role: chimeCustomResourceRole,
       timeout: cdk.Duration.minutes(1),
     });
