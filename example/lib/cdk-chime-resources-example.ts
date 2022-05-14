@@ -36,16 +36,16 @@ export class ChimeExample extends Stack {
     //   ],
     // });
 
-    const voiceConnectorPhone = new chime.ChimePhoneNumber(
-      this,
-      'voiceConnectorPhoneNumber',
-      {
-        phoneState: 'IL',
-        phoneCountry: chime.PhoneCountry.US,
-        phoneProductType: chime.PhoneProductType.VC,
-        phoneNumberType: chime.PhoneNumberType.LOCAL,
-      },
-    );
+    // const voiceConnectorPhone = new chime.ChimePhoneNumber(
+    //   this,
+    //   'voiceConnectorPhoneNumber',
+    //   {
+    //     phoneState: 'IL',
+    //     phoneCountry: chime.PhoneCountry.US,
+    //     phoneProductType: chime.PhoneProductType.VC,
+    //     phoneNumberType: chime.PhoneNumberType.LOCAL,
+    //   },
+    // );
 
     const voiceConnector = new chime.ChimeVoiceConnector(
       this,
@@ -82,7 +82,7 @@ export class ChimeExample extends Stack {
       },
     );
 
-    voiceConnectorPhone.associateWithVoiceConnector(voiceConnector);
+    // voiceConnectorPhone.associateWithVoiceConnector(voiceConnector);
 
     // new CfnOutput(this, 'phoneNumberOutput', {
     //   value: phoneNumber.phoneNumber,
@@ -96,9 +96,9 @@ export class ChimeExample extends Stack {
     //   value: sipRule.sipRuleId,
     // });
 
-    new CfnOutput(this, 'voiceConnectorPhoneNumberOutput', {
-      value: voiceConnectorPhone.phoneNumber,
-    });
+    // new CfnOutput(this, 'voiceConnectorPhoneNumberOutput', {
+    //   value: voiceConnectorPhone.phoneNumber,
+    // });
 
     new CfnOutput(this, 'voiceConnectorId', {
       value: voiceConnector.voiceConnectorId,

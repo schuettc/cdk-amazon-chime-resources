@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
-import { CustomResource, RemovalPolicy } from 'aws-cdk-lib';
+import { CustomResource } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as cr from 'aws-cdk-lib/custom-resources';
@@ -115,20 +115,29 @@ export class ChimeResources extends Construct {
       ],
     });
 
-    const boto3Layer = new lambda.LayerVersion(this, 'boto3', {
-      removalPolicy: RemovalPolicy.DESTROY,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../resources/layer')),
-      compatibleArchitectures: [lambda.Architecture.ARM_64],
-      compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
-    });
+    // const boto3Layer = new lambda.LayerVersion(this, 'boto3', {
+    //   removalPolicy: RemovalPolicy.DESTROY,
+    //   code: lambda.Code.fromAsset(path.join(__dirname, '../resources/layer')),
+    //   compatibleArchitectures: [lambda.Architecture.ARM_64],
+    //   compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
+    // });
 
-    const fn = new lambda.Function(stack, constructName, {
-      runtime: lambda.Runtime.PYTHON_3_9,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../resources/lambda')),
-      handler: 'index.handler',
-      architecture: lambda.Architecture.ARM_64,
-      layers: [boto3Layer],
+    // const fn = new lambda.Function(stack, constructName, {
+    //   runtime: lambda.Runtime.PYTHON_3_9,
+    //   code: lambda.Code.fromAsset(path.join(__dirname, '../resources/lambda')),
+    //   handler: 'index.handler',
+    //   architecture: lambda.Architecture.ARM_64,
+    //   layers: [boto3Layer],
+    //   role: chimeCustomResourceRole,
+    //   timeout: cdk.Duration.minutes(1),
+    // });
+
+    const fn = new lambda.DockerImageFunction(stack, constructName, {
+      code: lambda.DockerImageCode.fromImageAsset(
+        path.join(__dirname, '../resources/docker'),
+      ),
       role: chimeCustomResourceRole,
+      architecture: lambda.Architecture.ARM_64,
       timeout: cdk.Duration.minutes(1),
     });
 
