@@ -6,10 +6,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
   defaultReleaseBranch: 'main',
   releaseToNpm: true,
   eslintOptions: {
-    ignorePatterns: ['example/**'],
+    ignorePatterns: ['example/**', 'resources/**'],
   },
   workflowNodeVersion: '16.13.1',
-  devDeps: ['aws-cdk', 'ts-node'],
+  devDeps: ['aws-cdk', 'ts-node', 'yalc'],
   depsUpgradeOptions: {
     ignoreProjen: false,
     workflowOptions: {

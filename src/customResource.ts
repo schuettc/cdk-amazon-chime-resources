@@ -86,15 +86,12 @@ export class ChimeResources extends Construct {
                 'lambda:AddPermission',
                 'iam:PutRolePolicy',
                 'iam:CreateServiceLinkedRole',
-                'logs:ListLogDeliveries',
-                'logs:CreateLogDelivery',
-                'logs:DescribeLogGroups',
-                'log:PutResourcePolicy',
-                'log:DescribeResourcePolicies',
-                'log:*',
-                '*',
               ],
             }),
+          ],
+        }),
+        ['ssmPolicy']: new iam.PolicyDocument({
+          statements: [
             new iam.PolicyStatement({
               resources: [
                 `arn:aws:ssm:${stack.region}:${stack.account}:parameter/chime/*`,
@@ -103,6 +100,27 @@ export class ChimeResources extends Construct {
                 'ssm:PutParameter',
                 'ssm:GetParameter',
                 'ssm:DeleteParameter',
+              ],
+            }),
+          ],
+        }),
+        ['loggingPolicy']: new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              resources: [
+                // `arn:aws:logs:${stack.region}:${stack.account}:log-group/aws/ChimeVoiceConnectorSipMessages/*`,
+                // `arn:aws:logs:${stack.region}:${stack.account}:log-group/aws/ChimeVoiceConnectorLogs/*`,
+                '*',
+              ],
+              actions: [
+                'logs:ListLogDeliveries',
+                'logs:GetLogDelivery',
+                'logs:DeleteLogDelivery',
+                'logs:CreateLogDelivery',
+                'logs:DescribeLogGroups',
+                'logs:PutResourcePolicy',
+                'logs:DescribeResourcePolicies',
+                'logs:DescribeLogStreams',
               ],
             }),
           ],
