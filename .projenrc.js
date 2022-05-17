@@ -9,7 +9,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     ignorePatterns: ['example/**', 'resources/**'],
   },
   workflowNodeVersion: '16.13.1',
-  devDeps: ['aws-cdk', 'ts-node', 'yalc'],
+  devDeps: ['aws-cdk', 'ts-node', 'yalc', '@types/aws-lambda'],
   depsUpgradeOptions: {
     ignoreProjen: false,
     workflowOptions: {
